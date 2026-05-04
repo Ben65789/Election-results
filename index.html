@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,15 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=IBM+Plex+Mono:wght@400;600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+/* All styles use .er- prefix to avoid WordPress theme conflicts */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html, body {
-  background: transparent;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  width: 100%;
-}
 
 .er-widget {
   font-family: 'DM Sans', sans-serif;
@@ -23,9 +18,11 @@ html, body {
   color: #e6edf3;
   border-radius: 10px;
   overflow: hidden;
-  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
+/* Header */
 .er-header {
   background: #111820;
   padding: 18px 24px;
@@ -63,6 +60,7 @@ html, body {
 }
 @keyframes er-blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
 
+/* Tabs */
 .er-tabs-nav {
   display: flex;
   background: #111820;
@@ -91,9 +89,11 @@ html, body {
 .er-tab-btn:hover { color: #c9d1d9; background: rgba(255,255,255,0.03); }
 .er-tab-btn.er-active { color: #e6edf3; border-bottom-color: #e2a930; }
 
+/* Tab panel */
 .er-panel { display: none; padding: 22px 24px 28px; }
 .er-panel.er-active { display: block; }
 
+/* Progress section */
 .er-progress-box {
   background: #161d26;
   border: 1px solid #21303f;
@@ -141,6 +141,7 @@ html, body {
   transition: width 1s ease;
 }
 
+/* Section label */
 .er-section-label {
   font-size: 0.68rem;
   font-weight: 600;
@@ -151,6 +152,7 @@ html, body {
   margin-top: 22px;
 }
 
+/* Parties grid */
 .er-parties-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -185,6 +187,7 @@ html, body {
 .er-badge-loss  { background: rgba(218,54,51,0.2);  color: #f85149; }
 .er-badge-zero  { background: rgba(125,138,153,0.12); color: #7d8a99; }
 
+/* Results list */
 .er-results-list { display: flex; flex-direction: column; gap: 9px; }
 .er-result-card {
   background: #161d26;
@@ -205,11 +208,20 @@ html, body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.er-result-party { font-size: 0.74rem; color: #7d8a99; margin-top: 2px; }
+.er-result-party {
+  font-size: 0.74rem;
+  color: #7d8a99;
+  margin-top: 2px;
+}
 .er-result-meta { text-align: right; white-space: nowrap; }
-.er-result-maj { font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem; color: #c9d1d9; }
+.er-result-maj {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.74rem;
+  color: #c9d1d9;
+}
 .er-result-time { font-size: 0.7rem; color: #7d8a99; margin-top: 2px; }
 
+/* States */
 .er-loading, .er-error {
   padding: 40px;
   text-align: center;
@@ -218,6 +230,7 @@ html, body {
 }
 .er-error { color: #f85149; }
 
+/* Footer */
 .er-footer {
   background: #111820;
   border-top: 1px solid #21303f;
@@ -238,24 +251,36 @@ html, body {
 }
 </style>
 </head>
-<body>
+<body style="background:transparent; margin:0;">
 
-<div class="er-widget" id="erWidget">
+<div class="er-widget">
+
   <div class="er-header">
     <div class="er-title">🗳 UK Elections <span>2025</span> – Live Results</div>
     <div class="er-live-badge"><div class="er-live-dot"></div>Live</div>
   </div>
+
   <div class="er-tabs-nav" id="erTabsNav"></div>
+
   <div id="erPanels"></div>
+
   <div class="er-footer">
     <span>Refreshes every 60 seconds</span>
     <span id="erLastUpdated">—</span>
   </div>
+
 </div>
 
 <script>
+// ================================================================
+//  ▼▼  PASTE YOUR GOOGLE SHEET ID BELOW  ▼▼
+//  (It's the long ID in the middle of your Google Sheet URL)
+// ================================================================
 var SHEET_ID = '1pqObzBVhI2vW1lijyoPvsUQzvG28-bz0qqUBRnPsUnA';
 
+// ================================================================
+//  Sheet tab names — must exactly match your Google Sheet tab names
+// ================================================================
 var ELECTIONS = [
   { key: 'local',    label: 'Local Gov (England)',  sheet: 'LocalGov'  },
   { key: 'scottish', label: 'Scottish Parliament',  sheet: 'Scottish'  },
@@ -263,17 +288,20 @@ var ELECTIONS = [
   { key: 'mayoral',  label: 'Mayoral (England)',     sheet: 'Mayoral'   },
 ];
 
+// ================================================================
+//  Party brand colours — add/edit as needed
+// ================================================================
 var PARTY_COLORS = {
-  'labour':           '#E4003B',
-  'conservative':     '#003087',
-  'libdem':           '#FAA61A',
-  'lib dem':          '#FAA61A',
+  'labour':       '#E4003B',
+  'conservative': '#003087',
+  'libdem':       '#FAA61A',
+  'lib dem':      '#FAA61A',
   'liberal democrat': '#FAA61A',
-  'green':            '#00B140',
-  'reform':           '#12B6CF',
-  'reform uk':        '#12B6CF',
-  'other':            '#6B7280',
-  'independent':      '#6B7280',
+  'green':        '#00B140',
+  'reform':       '#12B6CF',
+  'reform uk':    '#12B6CF',
+  'other':        '#6B7280',
+  'independent':  '#6B7280',
 };
 
 function partyColor(name) {
@@ -285,12 +313,9 @@ function partyColor(name) {
   return '#6B7280';
 }
 
-// Sends the widget's full height to the parent page so the iframe auto-resizes
-function sendHeight() {
-  var h = document.getElementById('erWidget').scrollHeight;
-  window.parent.postMessage({ electionFrameHeight: h + 24 }, '*');
-}
-
+// ================================================================
+//  Data fetching & parsing
+// ================================================================
 function csvUrl(sheetName) {
   return 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
          '/gviz/tq?tqx=out:csv&sheet=' + encodeURIComponent(sheetName);
@@ -314,19 +339,31 @@ function parseSheet(csvText) {
   var rows = parseCSV(csvText);
   var data = { totalSeats: 0, declared: 0, parties: [], results: [] };
   var section = 'meta';
+
   for (var i = 0; i < rows.length; i++) {
     var row = rows[i];
     var key = (row[0] || '').trim().toLowerCase();
     if (!key) continue;
-    if (key === 'total_seats') { data.totalSeats = parseInt(row[1]) || 0; continue; }
-    if (key === 'declared')    { data.declared   = parseInt(row[1]) || 0; continue; }
-    if (key === 'party')       { section = 'parties'; continue; }
-    if (key === 'area')        { section = 'results';  continue; }
+
+    if (key === 'total_seats')  { data.totalSeats = parseInt(row[1]) || 0; continue; }
+    if (key === 'declared')     { data.declared   = parseInt(row[1]) || 0; continue; }
+    if (key === 'party')        { section = 'parties'; continue; }
+    if (key === 'area')         { section = 'results';  continue; }
+
     if (section === 'parties') {
-      data.parties.push({ name: row[0]||'', gains: parseInt(row[1])||0, losses: parseInt(row[2])||0 });
+      data.parties.push({
+        name:   row[0] || '',
+        gains:  parseInt(row[1]) || 0,
+        losses: parseInt(row[2]) || 0,
+      });
     }
     if (section === 'results') {
-      data.results.push({ area: row[0]||'', party: row[1]||'', majority: row[2]||'', time: row[3]||'' });
+      data.results.push({
+        area:     row[0] || '',
+        party:    row[1] || '',
+        majority: row[2] || '',
+        time:     row[3] || '',
+      });
     }
   }
   return data;
@@ -338,6 +375,9 @@ async function fetchSheet(sheetName) {
   return parseSheet(await resp.text());
 }
 
+// ================================================================
+//  Rendering
+// ================================================================
 function pctStr(declared, total) {
   if (!total) return '0';
   return Math.round((declared / total) * 100);
@@ -352,26 +392,28 @@ function renderPanel(data) {
 
   var partiesHtml = data.parties.map(function(p) {
     var col = partyColor(p.name);
+    var gc = badgeClass(p.gains);
+    var lc = badgeClass(-p.losses);
     var gainStr = (p.gains > 0 ? '+' : '') + p.gains;
     var lossStr = p.losses > 0 ? '−' + p.losses : '0';
     return '<div class="er-party-card" style="border-left-color:' + col + '">' +
            '<div class="er-party-name">' + p.name + '</div>' +
            '<div class="er-party-row">' +
-           '<span class="er-badge ' + badgeClass(p.gains)   + '">' + gainStr + '</span>' +
-           '<span class="er-badge ' + badgeClass(-p.losses) + '">' + lossStr + '</span>' +
+           '<span class="er-badge ' + gc  + '">' + gainStr + '</span>' +
+           '<span class="er-badge ' + lc  + '">' + lossStr + '</span>' +
            '</div></div>';
   }).join('');
 
-  var resultsHtml = data.results.map(function(r) {
+  var resultsHtml = data.results.slice(0, 3).map(function(r) {
     var col = partyColor(r.party);
     return '<div class="er-result-card" style="border-left-color:' + col + '">' +
            '<div class="er-result-info">' +
-           '<div class="er-result-area">' + (r.area  || '—') + '</div>' +
+           '<div class="er-result-area">' + (r.area || '—') + '</div>' +
            '<div class="er-result-party">' + (r.party || '—') + '</div>' +
            '</div>' +
            '<div class="er-result-meta">' +
            (r.majority ? '<div class="er-result-maj">Maj: ' + r.majority + '</div>' : '') +
-           (r.time     ? '<div class="er-result-time">' + r.time + '</div>' : '') +
+           (r.time     ? '<div class="er-result-time">'  + r.time     + '</div>' : '') +
            '</div></div>';
   }).join('') || '<div style="color:#7d8a99;font-size:0.82rem;padding:8px 0">No results declared yet</div>';
 
@@ -390,6 +432,9 @@ function renderPanel(data) {
          '<div class="er-results-list">' + resultsHtml + '</div>';
 }
 
+// ================================================================
+//  Tab UI & lifecycle
+// ================================================================
 var activeKey = ELECTIONS[0].key;
 var cache = {};
 
@@ -423,7 +468,6 @@ function switchTab(key) {
     var el = ELECTIONS.find(function(e) { return e.key === key; });
     if (el) loadElection(el);
   }
-  setTimeout(sendHeight, 300);
 }
 
 async function loadElection(el) {
@@ -437,7 +481,6 @@ async function loadElection(el) {
   } catch(err) {
     panel.innerHTML = '<div class="er-error">Could not load data — check your Sheet ID and that the sheet is public.<br><small style="opacity:.6">' + err.message + '</small></div>';
   }
-  sendHeight();
 }
 
 async function refreshAll() {
@@ -447,11 +490,8 @@ async function refreshAll() {
   }
   var now = new Date();
   document.getElementById('erLastUpdated').textContent =
-    'Updated ' + now.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
-  sendHeight();
+    'Updated ' + now.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'});
 }
-
-window.addEventListener('resize', sendHeight);
 
 buildUI();
 refreshAll();
