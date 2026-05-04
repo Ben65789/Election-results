@@ -5,34 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>UK Local Elections 2025 – Live Results</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=IBM+Plex+Mono:wght@400;600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+/* All styles use .er- prefix to avoid WordPress theme conflicts */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 .er-widget {
   font-family: 'DM Sans', sans-serif;
   background: #0d1117;
-  color: #ffffff;
+  color: #e6edf3;
   border-radius: 10px;
   overflow: hidden;
   max-width: 960px;
   margin: 0 auto;
 }
 
+/* Header */
 .er-header {
   background: #111820;
-  padding: 20px 28px;
+  padding: 18px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #21303f;
 }
 .er-title {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 1.45rem;
-  font-weight: 800;
-  color: #ffffff;
-  letter-spacing: -0.02em;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #e6edf3;
+  letter-spacing: -0.01em;
 }
 .er-title span { color: #e2a930; }
 .er-live-badge {
@@ -41,10 +43,10 @@
   gap: 6px;
   background: #da3633;
   color: #fff;
-  padding: 5px 12px;
+  padding: 4px 10px;
   border-radius: 4px;
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-size: 0.7rem;
+  font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -56,6 +58,7 @@
 }
 @keyframes er-blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
 
+/* Tabs */
 .er-tabs-nav {
   display: flex;
   background: #111820;
@@ -67,13 +70,13 @@
 .er-tab-btn {
   flex: 1;
   min-width: 110px;
-  padding: 14px 14px;
+  padding: 13px 14px;
   background: none;
   border: none;
   border-bottom: 3px solid transparent;
-  color: #8b99aa;
+  color: #7d8a99;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
   transition: color 0.18s, border-color 0.18s, background 0.18s;
@@ -81,48 +84,50 @@
   white-space: nowrap;
   letter-spacing: 0.01em;
 }
-.er-tab-btn:hover { color: #ffffff; background: rgba(255,255,255,0.04); }
-.er-tab-btn.er-active { color: #ffffff; border-bottom-color: #e2a930; }
+.er-tab-btn:hover { color: #c9d1d9; background: rgba(255,255,255,0.03); }
+.er-tab-btn.er-active { color: #e6edf3; border-bottom-color: #e2a930; }
 
-.er-panel { display: none; padding: 24px 28px 32px; }
+/* Tab panel */
+.er-panel { display: none; padding: 22px 24px 28px; }
 .er-panel.er-active { display: block; }
 
+/* Progress section */
 .er-progress-box {
   background: #161d26;
   border: 1px solid #21303f;
-  border-radius: 10px;
-  padding: 18px 22px;
-  margin-bottom: 24px;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 22px;
 }
 .er-progress-row {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .er-progress-label {
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-size: 0.7rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: #8b99aa;
+  letter-spacing: 0.1em;
+  color: #7d8a99;
 }
 .er-progress-pct-wrap { text-align: right; }
 .er-progress-pct {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: 600;
-  color: #ffffff;
+  color: #e6edf3;
   line-height: 1;
 }
 .er-progress-sub {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.72rem;
-  color: #8b99aa;
-  margin-top: 4px;
+  font-size: 0.7rem;
+  color: #7d8a99;
+  margin-top: 3px;
 }
 .er-progress-track {
-  height: 8px;
+  height: 7px;
   background: #21303f;
   border-radius: 4px;
   overflow: hidden;
@@ -134,56 +139,59 @@
   transition: width 1s ease;
 }
 
+/* Section label */
 .er-section-label {
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-size: 0.68rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: #8b99aa;
-  margin-bottom: 14px;
-  margin-top: 24px;
+  letter-spacing: 0.12em;
+  color: #7d8a99;
+  margin-bottom: 12px;
+  margin-top: 22px;
 }
 
+/* Parties grid */
 .er-parties-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   gap: 10px;
 }
 .er-party-card {
   background: #161d26;
   border: 1px solid #21303f;
-  border-radius: 10px;
-  padding: 14px 16px;
+  border-radius: 8px;
+  padding: 12px 14px;
   border-left: 4px solid;
 }
 .er-party-name {
-  font-size: 0.74rem;
-  font-weight: 700;
+  font-size: 0.7rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: #ffffff;
-  margin-bottom: 10px;
+  letter-spacing: 0.06em;
+  color: #7d8a99;
+  margin-bottom: 9px;
 }
 .er-party-row { display: flex; gap: 7px; align-items: center; }
 .er-badge {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.84rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  padding: 4px 9px;
+  padding: 3px 8px;
   border-radius: 4px;
-  min-width: 38px;
+  min-width: 36px;
   text-align: center;
 }
 .er-badge-gain  { background: rgba(35,134,54,0.2);  color: #3fb950; }
 .er-badge-loss  { background: rgba(218,54,51,0.2);  color: #f85149; }
-.er-badge-zero  { background: rgba(125,138,153,0.12); color: #8b99aa; }
+.er-badge-zero  { background: rgba(125,138,153,0.12); color: #7d8a99; }
 
+/* Results list */
 .er-results-list { display: flex; flex-direction: column; gap: 9px; }
 .er-result-card {
   background: #161d26;
   border: 1px solid #21303f;
-  border-radius: 10px;
-  padding: 14px 18px;
+  border-radius: 8px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   gap: 14px;
@@ -191,75 +199,88 @@
 }
 .er-result-info { flex: 1; min-width: 0; }
 .er-result-area {
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #e6edf3;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .er-result-party {
-  font-size: 0.76rem;
-  color: #8b99aa;
-  margin-top: 3px;
-  font-weight: 500;
+  font-size: 0.74rem;
+  color: #7d8a99;
+  margin-top: 2px;
 }
 .er-result-meta { text-align: right; white-space: nowrap; }
 .er-result-maj {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.76rem;
-  color: #ffffff;
-  font-weight: 600;
+  font-size: 0.74rem;
+  color: #c9d1d9;
 }
-.er-result-time { font-size: 0.7rem; color: #8b99aa; margin-top: 2px; }
+.er-result-time { font-size: 0.7rem; color: #7d8a99; margin-top: 2px; }
 
+/* States */
 .er-loading, .er-error {
   padding: 40px;
   text-align: center;
-  font-size: 0.88rem;
-  color: #8b99aa;
+  font-size: 0.85rem;
+  color: #7d8a99;
 }
 .er-error { color: #f85149; }
 
+/* Footer */
 .er-footer {
   background: #111820;
   border-top: 1px solid #21303f;
-  padding: 11px 28px;
+  padding: 10px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.72rem;
-  color: #8b99aa;
-  font-weight: 500;
+  font-size: 0.7rem;
+  color: #4a5568;
 }
 
 @media (max-width: 580px) {
-  .er-header { padding: 16px 18px; }
-  .er-title { font-size: 1.15rem; }
-  .er-panel { padding: 18px 16px 24px; }
+  .er-header { padding: 14px 16px; }
+  .er-title { font-size: 1rem; }
+  .er-panel { padding: 16px 14px 22px; }
   .er-parties-grid { grid-template-columns: repeat(2, 1fr); }
-  .er-progress-pct { font-size: 1.4rem; }
+  .er-progress-pct { font-size: 1.3rem; }
 }
 </style>
 </head>
-<body style="background:transparent; margin:0;">
+
+<!-- FIX 1: overflow:hidden added to remove iframe scrollbar -->
+<body style="background:transparent; margin:0; overflow:hidden;">
 
 <div class="er-widget">
+
   <div class="er-header">
     <div class="er-title">🗳 UK Elections <span>2025</span> – Live Results</div>
     <div class="er-live-badge"><div class="er-live-dot"></div>Live</div>
   </div>
+
   <div class="er-tabs-nav" id="erTabsNav"></div>
+
   <div id="erPanels"></div>
+
   <div class="er-footer">
     <span>Refreshes every 60 seconds</span>
     <span id="erLastUpdated">—</span>
   </div>
+
 </div>
 
 <script>
+// ================================================================
+//  ▼▼  PASTE YOUR GOOGLE SHEET ID BELOW  ▼▼
+//  (It's the long ID in the middle of your Google Sheet URL)
+// ================================================================
 var SHEET_ID = '1pqObzBVhI2vW1lijyoPvsUQzvG28-bz0qqUBRnPsUnA';
 
+// ================================================================
+//  Sheet tab names — must exactly match your Google Sheet tab names
+// ================================================================
 var ELECTIONS = [
   { key: 'local',    label: 'Local Gov (England)',  sheet: 'LocalGov'  },
   { key: 'scottish', label: 'Scottish Parliament',  sheet: 'Scottish'  },
@@ -267,6 +288,9 @@ var ELECTIONS = [
   { key: 'mayoral',  label: 'Mayoral (England)',     sheet: 'Mayoral'   },
 ];
 
+// ================================================================
+//  Party brand colours — add/edit as needed
+// ================================================================
 var PARTY_COLORS = {
   'labour':       '#E4003B',
   'conservative': '#003087',
@@ -289,6 +313,9 @@ function partyColor(name) {
   return '#6B7280';
 }
 
+// ================================================================
+//  Data fetching & parsing
+// ================================================================
 function csvUrl(sheetName) {
   return 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
          '/gviz/tq?tqx=out:csv&sheet=' + encodeURIComponent(sheetName);
@@ -312,16 +339,32 @@ function parseSheet(csvText) {
   var rows = parseCSV(csvText);
   var data = { totalSeats: 0, declared: 0, parties: [], results: [] };
   var section = 'meta';
+
   for (var i = 0; i < rows.length; i++) {
     var row = rows[i];
     var key = (row[0] || '').trim().toLowerCase();
     if (!key) continue;
+
     if (key === 'total_seats')  { data.totalSeats = parseInt(row[1]) || 0; continue; }
     if (key === 'declared')     { data.declared   = parseInt(row[1]) || 0; continue; }
     if (key === 'party')        { section = 'parties'; continue; }
     if (key === 'area')         { section = 'results';  continue; }
-    if (section === 'parties') { data.parties.push({ name: row[0] || '', gains: parseInt(row[1]) || 0, losses: parseInt(row[2]) || 0 }); }
-    if (section === 'results')  { data.results.push({ area: row[0] || '', party: row[1] || '', majority: row[2] || '', time: row[3] || '' }); }
+
+    if (section === 'parties') {
+      data.parties.push({
+        name:   row[0] || '',
+        gains:  parseInt(row[1]) || 0,
+        losses: parseInt(row[2]) || 0,
+      });
+    }
+    if (section === 'results') {
+      data.results.push({
+        area:     row[0] || '',
+        party:    row[1] || '',
+        majority: row[2] || '',
+        time:     row[3] || '',
+      });
+    }
   }
   return data;
 }
@@ -332,6 +375,9 @@ async function fetchSheet(sheetName) {
   return parseSheet(await resp.text());
 }
 
+// ================================================================
+//  Rendering
+// ================================================================
 function pctStr(declared, total) {
   if (!total) return '0';
   return Math.round((declared / total) * 100);
@@ -343,19 +389,54 @@ function badgeClass(n) {
 
 function renderPanel(data) {
   var pct = pctStr(data.declared, data.totalSeats);
+
   var partiesHtml = data.parties.map(function(p) {
     var col = partyColor(p.name);
+    var gc = badgeClass(p.gains);
+    var lc = badgeClass(-p.losses);
     var gainStr = (p.gains > 0 ? '+' : '') + p.gains;
-    var lossStr = p.losses > 0 ? '-' + p.losses : '0';
-    return '<div class="er-party-card" style="border-left-color:' + col + '"><div class="er-party-name">' + p.name + '</div><div class="er-party-row"><span class="er-badge ' + badgeClass(p.gains) + '">' + gainStr + '</span><span class="er-badge ' + badgeClass(-p.losses) + '">' + lossStr + '</span></div></div>';
+    // FIX 2: Loss now correctly shows − prefix when losses > 0, otherwise shows 0
+    var lossStr = p.losses > 0 ? '−' + p.losses : '0';
+    return '<div class="er-party-card" style="border-left-color:' + col + '">' +
+           '<div class="er-party-name">' + p.name + '</div>' +
+           '<div class="er-party-row">' +
+           '<span class="er-badge ' + gc  + '">' + gainStr + '</span>' +
+           '<span class="er-badge ' + lc  + '">' + lossStr + '</span>' +
+           '</div></div>';
   }).join('');
-  var resultsHtml = data.results.slice(0, 3).map(function(r) {
+
+  // FIX 3: Removed .slice(0, 3) — now shows ALL results from the sheet, not just first 3
+  var resultsHtml = data.results.map(function(r) {
     var col = partyColor(r.party);
-    return '<div class="er-result-card" style="border-left-color:' + col + '"><div class="er-result-info"><div class="er-result-area">' + (r.area || '-') + '</div><div class="er-result-party">' + (r.party || '-') + '</div></div><div class="er-result-meta">' + (r.majority ? '<div class="er-result-maj">Maj: ' + r.majority + '</div>' : '') + (r.time ? '<div class="er-result-time">' + r.time + '</div>' : '') + '</div></div>';
-  }).join('') || '<div style="color:#8b99aa;font-size:0.85rem;padding:8px 0">No results declared yet</div>';
-  return '<div class="er-progress-box"><div class="er-progress-row"><span class="er-progress-label">Seats Declared</span><div class="er-progress-pct-wrap"><div class="er-progress-pct">' + pct + '%</div><div class="er-progress-sub">' + data.declared + ' of ' + data.totalSeats + ' seats</div></div></div><div class="er-progress-track"><div class="er-progress-fill" style="width:' + pct + '%"></div></div></div><div class="er-section-label">Party Gains &amp; Losses</div><div class="er-parties-grid">' + partiesHtml + '</div><div class="er-section-label">Latest Results</div><div class="er-results-list">' + resultsHtml + '</div>';
+    return '<div class="er-result-card" style="border-left-color:' + col + '">' +
+           '<div class="er-result-info">' +
+           '<div class="er-result-area">' + (r.area || '—') + '</div>' +
+           '<div class="er-result-party">' + (r.party || '—') + '</div>' +
+           '</div>' +
+           '<div class="er-result-meta">' +
+           (r.majority ? '<div class="er-result-maj">Maj: ' + r.majority + '</div>' : '') +
+           (r.time     ? '<div class="er-result-time">'  + r.time     + '</div>' : '') +
+           '</div></div>';
+  }).join('') || '<div style="color:#7d8a99;font-size:0.82rem;padding:8px 0">No results declared yet</div>';
+
+  return '<div class="er-progress-box">' +
+         '<div class="er-progress-row">' +
+         '<span class="er-progress-label">Seats Declared</span>' +
+         '<div class="er-progress-pct-wrap">' +
+         '<div class="er-progress-pct">' + pct + '%</div>' +
+         '<div class="er-progress-sub">' + data.declared + ' of ' + data.totalSeats + ' seats</div>' +
+         '</div></div>' +
+         '<div class="er-progress-track"><div class="er-progress-fill" style="width:' + pct + '%"></div></div>' +
+         '</div>' +
+         '<div class="er-section-label">Party Gains &amp; Losses</div>' +
+         '<div class="er-parties-grid">' + partiesHtml + '</div>' +
+         '<div class="er-section-label">Latest Results</div>' +
+         '<div class="er-results-list">' + resultsHtml + '</div>';
 }
 
+// ================================================================
+//  Tab UI & lifecycle
+// ================================================================
 var activeKey = ELECTIONS[0].key;
 var cache = {};
 
@@ -363,10 +444,12 @@ function buildUI() {
   var nav = document.getElementById('erTabsNav');
   var panels = document.getElementById('erPanels');
   nav.innerHTML = ELECTIONS.map(function(e) {
-    return '<button class="er-tab-btn' + (e.key === activeKey ? ' er-active' : '') + '" data-key="' + e.key + '">' + e.label + '</button>';
+    return '<button class="er-tab-btn' + (e.key === activeKey ? ' er-active' : '') +
+           '" data-key="' + e.key + '">' + e.label + '</button>';
   }).join('');
   panels.innerHTML = ELECTIONS.map(function(e) {
-    return '<div class="er-panel' + (e.key === activeKey ? ' er-active' : '') + '" id="erPanel-' + e.key + '"><div class="er-loading">Loading...</div></div>';
+    return '<div class="er-panel' + (e.key === activeKey ? ' er-active' : '') +
+           '" id="erPanel-' + e.key + '"><div class="er-loading">Loading…</div></div>';
   }).join('');
   nav.addEventListener('click', function(e) {
     var btn = e.target.closest('[data-key]');
@@ -377,19 +460,22 @@ function buildUI() {
 
 function switchTab(key) {
   activeKey = key;
-  document.querySelectorAll('.er-tab-btn').forEach(function(b) { b.classList.toggle('er-active', b.dataset.key === key); });
-  document.querySelectorAll('.er-panel').forEach(function(p) { p.classList.toggle('er-active', p.id === 'erPanel-' + key); });
+  document.querySelectorAll('.er-tab-btn').forEach(function(b) {
+    b.classList.toggle('er-active', b.dataset.key === key);
+  });
+  document.querySelectorAll('.er-panel').forEach(function(p) {
+    p.classList.toggle('er-active', p.id === 'erPanel-' + key);
+  });
   if (!cache[key]) {
     var el = ELECTIONS.find(function(e) { return e.key === key; });
     if (el) loadElection(el);
   }
-  sendHeight();
 }
 
 async function loadElection(el) {
   var panel = document.getElementById('erPanel-' + el.key);
   if (!panel) return;
-  panel.innerHTML = '<div class="er-loading">Loading results...</div>';
+  panel.innerHTML = '<div class="er-loading">Loading results…</div>';
   try {
     var data = await fetchSheet(el.sheet);
     cache[el.key] = data;
@@ -397,7 +483,6 @@ async function loadElection(el) {
   } catch(err) {
     panel.innerHTML = '<div class="er-error">Could not load data — check your Sheet ID and that the sheet is public.<br><small style="opacity:.6">' + err.message + '</small></div>';
   }
-  sendHeight();
 }
 
 async function refreshAll() {
@@ -408,16 +493,7 @@ async function refreshAll() {
   var now = new Date();
   document.getElementById('erLastUpdated').textContent =
     'Updated ' + now.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'});
-  sendHeight();
 }
-
-function sendHeight() {
-  window.parent.postMessage({ iframeHeight: document.body.scrollHeight }, '*');
-}
-
-window.addEventListener('load', sendHeight);
-window.addEventListener('resize', sendHeight);
-setInterval(sendHeight, 1000);
 
 buildUI();
 refreshAll();
