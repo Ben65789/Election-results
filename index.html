@@ -270,20 +270,20 @@ var SHEET_ID = '1pqObzBVhI2vW1lijyoPvsUQzvG28-bz0qqUBRnPsUnA';
 var ELECTIONS = [
   { key: 'local',    label: 'Local Gov (England)', sheet: 'LocalGov', defaultParties: [] },
   { key: 'holyrood', label: 'Holyrood',             sheet: 'Scottish', defaultParties: [
-      { name: 'SNP',          gains: 0, losses: 0 },
+      { name: 'Reform UK',    gains: 0, losses: 0 },
+      { name: 'Green',        gains: 0, losses: 0 },
       { name: 'Labour',       gains: 0, losses: 0 },
       { name: 'Conservative', gains: 0, losses: 0 },
-      { name: 'Reform UK',    gains: 0, losses: 0 },
+      { name: 'SNP',          gains: 0, losses: 0 },
       { name: 'Lib Dem',      gains: 0, losses: 0 },
-      { name: 'Green',        gains: 0, losses: 0 },
   ]},
   { key: 'senedd',   label: 'Senedd Cymru',         sheet: 'Senedd',  defaultParties: [
-      { name: 'Plaid Cymru',  gains: 0, losses: 0 },
+      { name: 'Reform UK',    gains: 0, losses: 0 },
+      { name: 'Green',        gains: 0, losses: 0 },
       { name: 'Labour',       gains: 0, losses: 0 },
       { name: 'Conservative', gains: 0, losses: 0 },
-      { name: 'Reform UK',    gains: 0, losses: 0 },
+      { name: 'Plaid Cymru',  gains: 0, losses: 0 },
       { name: 'Lib Dem',      gains: 0, losses: 0 },
-      { name: 'Green',        gains: 0, losses: 0 },
   ]},
   { key: 'mayoral',  label: 'Mayoral (England)',     sheet: 'Mayoral', defaultParties: [] },
 ];
@@ -312,10 +312,14 @@ var PARTY_COLORS = {
 // ================================================================
 //  Party sort order (first = highest priority)
 // ================================================================
-var PARTY_ORDER = ['reform', 'labour', 'conservative', 'tory'];
+var PARTY_ORDER = ['reform', 'green', 'labour', 'conservative', 'tory', 'lib dem', 'libdem', 'liberal democrat', 'snp', 'scottish national', 'plaid'];
+var PARTY_LAST  = ['other', 'independent'];
 
 function partyPriority(name) {
   var n = (name || '').toLowerCase();
+  for (var i = 0; i < PARTY_LAST.length; i++) {
+    if (n.indexOf(PARTY_LAST[i]) !== -1) return 9999;
+  }
   for (var i = 0; i < PARTY_ORDER.length; i++) {
     if (n.indexOf(PARTY_ORDER[i]) !== -1) return i;
   }
