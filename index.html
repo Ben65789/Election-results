@@ -268,10 +268,24 @@ var SHEET_ID = '1pqObzBVhI2vW1lijyoPvsUQzvG28-bz0qqUBRnPsUnA';
 //  Election tabs — label shown in nav, sheet = exact Google Sheet tab name
 // ================================================================
 var ELECTIONS = [
-  { key: 'local',    label: 'Local Gov (England)', sheet: 'LocalGov' },
-  { key: 'holyrood', label: 'Holyrood',             sheet: 'Scottish' },
-  { key: 'senedd',   label: 'Senedd Cymru',         sheet: 'Senedd'  },
-  { key: 'mayoral',  label: 'Mayoral (England)',     sheet: 'Mayoral' },
+  { key: 'local',    label: 'Local Gov (England)', sheet: 'LocalGov', defaultParties: [] },
+  { key: 'holyrood', label: 'Holyrood',             sheet: 'Scottish', defaultParties: [
+      { name: 'SNP',          gains: 0, losses: 0 },
+      { name: 'Labour',       gains: 0, losses: 0 },
+      { name: 'Conservative', gains: 0, losses: 0 },
+      { name: 'Reform UK',    gains: 0, losses: 0 },
+      { name: 'Lib Dem',      gains: 0, losses: 0 },
+      { name: 'Green',        gains: 0, losses: 0 },
+  ]},
+  { key: 'senedd',   label: 'Senedd Cymru',         sheet: 'Senedd',  defaultParties: [
+      { name: 'Plaid Cymru',  gains: 0, losses: 0 },
+      { name: 'Labour',       gains: 0, losses: 0 },
+      { name: 'Conservative', gains: 0, losses: 0 },
+      { name: 'Reform UK',    gains: 0, losses: 0 },
+      { name: 'Lib Dem',      gains: 0, losses: 0 },
+      { name: 'Green',        gains: 0, losses: 0 },
+  ]},
+  { key: 'mayoral',  label: 'Mayoral (England)',     sheet: 'Mayoral', defaultParties: [] },
 ];
 
 // ================================================================
@@ -359,6 +373,18 @@ function parseSheet(csvText) {
     }
   }
   return data;
+}
+
+// Merge sheet parties with defaults — sheet data wins, defaults fill gaps
+function mergeParties(sheetParties, defaults) {
+  var result = sheetParties.slice();
+  defaults.forEach(function(def) {
+    var already = result.some(function(p) {
+      return p.name.toLowerCase().trim() === def.name.toLowerCase().trim();
+    });
+    if (!already) result.push(def);
+  });
+  return result;
 }
 
 async function fetchSheet(sheetName) {
@@ -472,6 +498,7 @@ async function loadElection(el) {
   panel.innerHTML = '<div class="er-loading">Loading results…</div>';
   try {
     var data = await fetchSheet(el.sheet);
+    data.parties = mergeParties(data.parties, el.defaultParties || []);
     cache[el.key] = data;
     panel.innerHTML = renderPanel(data);
   } catch(err) {
