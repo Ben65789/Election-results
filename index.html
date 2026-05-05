@@ -36,8 +36,6 @@ body { margin: 0; background: #0d1117; }
   font-weight: 700;
   color: #ffffff;
   letter-spacing: -0.01em;
-  flex: 1;
-  min-width: 0;
 }
 .er-title span { color: #e2a930; }
 .er-live-badge {
@@ -242,115 +240,6 @@ body { margin: 0; background: #0d1117; }
 .er-net-pos { color: #3fb950; }
 .er-net-neg { color: #f85149; }
 .er-net-zero { color: #8a9ab0; }
-
-/* ── Mobile ────────────────────────────────────────────── */
-@media (max-width: 600px) {
-  .er-header {
-    padding: 14px 16px;
-    gap: 10px;
-  }
-  .er-title {
-    font-size: 1rem;
-  }
-  .er-live-badge {
-    font-size: 0.68rem;
-    padding: 4px 9px;
-    letter-spacing: 0.08em;
-  }
-  .er-tab-btn {
-    font-size: 0.75rem;
-    padding: 11px 10px;
-    min-width: 90px;
-  }
-  .er-panel {
-    padding: 16px 14px 28px;
-  }
-  .er-progress-box {
-    padding: 14px 16px;
-    margin-bottom: 20px;
-  }
-  .er-progress-pct {
-    font-size: 1.7rem;
-  }
-  .er-progress-sub {
-    font-size: 0.74rem;
-  }
-  .er-parties-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-  .er-party-card {
-    padding: 12px 12px;
-  }
-  .er-party-name {
-    font-size: 0.7rem;
-    margin-bottom: 8px;
-  }
-  .er-badge {
-    font-size: 0.8rem;
-    padding: 3px 7px;
-    min-width: 34px;
-  }
-  .er-result-card {
-    padding: 12px 14px;
-    gap: 10px;
-  }
-  .er-result-area {
-    font-size: 0.88rem;
-  }
-  .er-result-party {
-    font-size: 0.74rem;
-  }
-  .er-result-maj, .er-result-time {
-    font-size: 0.7rem;
-  }
-  .er-overall-row {
-    padding: 12px 12px;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .er-overall-rank {
-    font-size: 0.95rem;
-    min-width: 26px;
-  }
-  .er-overall-name {
-    font-size: 0.82rem;
-    flex: 1;
-    min-width: 0;
-  }
-  .er-overall-breakdown {
-    font-size: 0.68rem;
-    min-width: unset;
-    width: 100%;
-    text-align: left;
-    padding-left: 36px;
-    margin-top: -4px;
-    order: 4;
-  }
-  .er-overall-net {
-    font-size: 1.2rem;
-    min-width: 55px;
-  }
-  .er-section-label {
-    font-size: 0.66rem;
-    margin-top: 20px;
-    margin-bottom: 10px;
-  }
-  .er-footer {
-    padding: 10px 14px;
-    font-size: 0.68rem;
-  }
-}
-
-/* ── Tablet ─────────────────────────────────────────────── */
-@media (min-width: 601px) and (max-width: 900px) {
-  .er-header { padding: 18px 24px; }
-  .er-title { font-size: 1.25rem; }
-  .er-panel { padding: 22px 24px 32px; }
-  .er-parties-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
-  .er-overall-breakdown { font-size: 0.72rem; min-width: 70px; }
-  .er-overall-net { font-size: 1.3rem; }
-}
 
 /* States */
 .er-loading, .er-error {
