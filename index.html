@@ -221,6 +221,26 @@ body { margin: 0; background: #0d1117; }
 }
 .er-result-time { font-size: 0.76rem; color: #8a9ab0; margin-top: 3px; }
 
+/* Overall leaderboard */
+.er-overall-list { display: flex; flex-direction: column; gap: 10px; }
+.er-overall-row {
+  background: #161d26;
+  border: 1px solid #21303f;
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-left: 5px solid;
+}
+.er-overall-rank { font-size: 1.1rem; font-weight: 700; color: #8a9ab0; min-width: 32px; text-align: center; }
+.er-overall-name { flex: 1; font-size: 1rem; font-weight: 700; color: #ffffff; text-transform: uppercase; letter-spacing: 0.05em; }
+.er-overall-net { font-size: 1.5rem; font-weight: 700; min-width: 80px; text-align: right; }
+.er-overall-breakdown { font-size: 0.76rem; color: #8a9ab0; text-align: right; white-space: nowrap; min-width: 90px; }
+.er-net-pos { color: #3fb950; }
+.er-net-neg { color: #f85149; }
+.er-net-zero { color: #8a9ab0; }
+
 /* States */
 .er-loading, .er-error {
   padding: 60px;
@@ -459,22 +479,75 @@ function renderPanel(data) {
 }
 
 // ================================================================
+//  Overall net seats leaderboard
+// ================================================================
+function buildOverallData() {
+  var totals = {};
+  ELECTIONS.forEach(function(el) {
+    var data = cache[el.key];
+    if (!data) return;
+    data.parties.forEach(function(p) {
+      var key = p.name.toLowerCase().trim();
+      if (!totals[key]) totals[key] = { name: p.name, gains: 0, losses: 0 };
+      totals[key].gains  += p.gains;
+      totals[key].losses += p.losses;
+    });
+  });
+  return Object.values(totals).sort(function(a, b) {
+    return (b.gains - b.losses) - (a.gains - a.losses);
+  });
+}
+
+function renderOverall() {
+  var panel = document.getElementById('erPanel-overall');
+  if (!panel) return;
+  var parties = buildOverallData();
+  if (!parties.length) {
+    panel.innerHTML = '<div class="er-loading">Waiting for election data…</div>';
+    return;
+  }
+  var html = '<div class="er-section-label">Net Seats — All Elections Combined</div>' +
+             '<div class="er-overall-list">';
+  parties.forEach(function(p, i) {
+    var net = p.gains - p.losses;
+    var col = partyColor(p.name);
+    var netStr = net > 0 ? '+' + net : '' + net;
+    var netClass = net > 0 ? 'er-net-pos' : net < 0 ? 'er-net-neg' : 'er-net-zero';
+    var rank = i + 1;
+    var rankDisplay = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#' + rank;
+    html += '<div class="er-overall-row" style="border-left-color:' + col + '">' +
+            '<div class="er-overall-rank">' + rankDisplay + '</div>' +
+            '<div class="er-overall-name">' + p.name + '</div>' +
+            '<div class="er-overall-breakdown">+' + p.gains + ' gains / −' + p.losses + ' losses</div>' +
+            '<div class="er-overall-net ' + netClass + '">' + netStr + '</div>' +
+            '</div>';
+  });
+  html += '</div>';
+  panel.innerHTML = html;
+}
+
+// ================================================================
 //  Tab UI & lifecycle
 // ================================================================
-var activeKey = ELECTIONS[0].key;
+var activeKey = 'overall';
 var cache = {};
 
 function buildUI() {
   var nav = document.getElementById('erTabsNav');
   var panels = document.getElementById('erPanels');
-  nav.innerHTML = ELECTIONS.map(function(e) {
+
+  var allTabs = [{ key: 'overall', label: '⭐ Overall' }].concat(ELECTIONS);
+
+  nav.innerHTML = allTabs.map(function(e) {
     return '<button class="er-tab-btn' + (e.key === activeKey ? ' er-active' : '') +
            '" data-key="' + e.key + '">' + e.label + '</button>';
   }).join('');
-  panels.innerHTML = ELECTIONS.map(function(e) {
+
+  panels.innerHTML = allTabs.map(function(e) {
     return '<div class="er-panel' + (e.key === activeKey ? ' er-active' : '') +
            '" id="erPanel-' + e.key + '"><div class="er-loading">Loading…</div></div>';
   }).join('');
+
   nav.addEventListener('click', function(e) {
     var btn = e.target.closest('[data-key]');
     if (!btn) return;
@@ -490,6 +563,7 @@ function switchTab(key) {
   document.querySelectorAll('.er-panel').forEach(function(p) {
     p.classList.toggle('er-active', p.id === 'erPanel-' + key);
   });
+  if (key === 'overall') { renderOverall(); return; }
   if (!cache[key]) {
     var el = ELECTIONS.find(function(e) { return e.key === key; });
     if (el) loadElection(el);
@@ -515,6 +589,7 @@ async function refreshAll() {
   for (var i = 0; i < ELECTIONS.length; i++) {
     await loadElection(ELECTIONS[i]);
   }
+  renderOverall();
   var now = new Date();
   document.getElementById('erLastUpdated').textContent =
     'Updated ' + now.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
