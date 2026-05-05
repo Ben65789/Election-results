@@ -463,6 +463,27 @@ function renderPanel(data) {
            '</div></div>';
   }).join('') || '<div style="color:#8a9ab0;font-size:0.9rem;padding:10px 0">No results declared yet</div>';
 
+  var netSorted = data.parties.slice().sort(function(a, b) {
+    return (b.gains - b.losses) - (a.gains - a.losses);
+  });
+
+  var rankingsHtml = '<div class="er-overall-list">' +
+    netSorted.map(function(p, i) {
+      var net = p.gains - p.losses;
+      var col = partyColor(p.name);
+      var netStr = net > 0 ? '+' + net : '' + net;
+      var netClass = net > 0 ? 'er-net-pos' : net < 0 ? 'er-net-neg' : 'er-net-zero';
+      var rank = i + 1;
+      var rankDisplay = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#' + rank;
+      return '<div class="er-overall-row" style="border-left-color:' + col + '">' +
+             '<div class="er-overall-rank">' + rankDisplay + '</div>' +
+             '<div class="er-overall-name">' + p.name + '</div>' +
+             '<div class="er-overall-breakdown">+' + p.gains + ' gains / −' + p.losses + ' losses</div>' +
+             '<div class="er-overall-net ' + netClass + '">' + netStr + '</div>' +
+             '</div>';
+    }).join('') +
+  '</div>';
+
   return '<div class="er-progress-box">' +
          '<div class="er-progress-row">' +
          '<span class="er-progress-label">Seats Declared</span>' +
@@ -475,7 +496,9 @@ function renderPanel(data) {
          '<div class="er-section-label">Party Gains &amp; Losses</div>' +
          '<div class="er-parties-grid">' + (partiesHtml || '<div style="color:#8a9ab0;font-size:0.9rem">No party data yet</div>') + '</div>' +
          '<div class="er-section-label">Latest Results</div>' +
-         '<div class="er-results-list">' + resultsHtml + '</div>';
+         '<div class="er-results-list">' + resultsHtml + '</div>' +
+         '<div class="er-section-label">Net Seat Rankings</div>' +
+         rankingsHtml;
 }
 
 // ================================================================
