@@ -552,21 +552,19 @@ function renderOverall() {
 // ================================================================
 //  Tab UI & lifecycle
 // ================================================================
-var activeKey = 'overall';
+var activeKey = ELECTIONS[0].key;
 var cache = {};
 
 function buildUI() {
   var nav = document.getElementById('erTabsNav');
   var panels = document.getElementById('erPanels');
 
-  var allTabs = [{ key: 'overall', label: '⭐ Overall' }].concat(ELECTIONS);
-
-  nav.innerHTML = allTabs.map(function(e) {
+  nav.innerHTML = ELECTIONS.map(function(e) {
     return '<button class="er-tab-btn' + (e.key === activeKey ? ' er-active' : '') +
            '" data-key="' + e.key + '">' + e.label + '</button>';
   }).join('');
 
-  panels.innerHTML = allTabs.map(function(e) {
+  panels.innerHTML = ELECTIONS.map(function(e) {
     return '<div class="er-panel' + (e.key === activeKey ? ' er-active' : '') +
            '" id="erPanel-' + e.key + '"><div class="er-loading">Loading…</div></div>';
   }).join('');
@@ -586,7 +584,6 @@ function switchTab(key) {
   document.querySelectorAll('.er-panel').forEach(function(p) {
     p.classList.toggle('er-active', p.id === 'erPanel-' + key);
   });
-  if (key === 'overall') { renderOverall(); return; }
   if (!cache[key]) {
     var el = ELECTIONS.find(function(e) { return e.key === key; });
     if (el) loadElection(el);
@@ -612,7 +609,6 @@ async function refreshAll() {
   for (var i = 0; i < ELECTIONS.length; i++) {
     await loadElection(ELECTIONS[i]);
   }
-  renderOverall();
   var now = new Date();
   document.getElementById('erLastUpdated').textContent =
     'Updated ' + now.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
