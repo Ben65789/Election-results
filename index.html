@@ -2,26 +2,50 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>UK Local Elections 2025 – Live Results</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-body { margin: 0; background: #0d1117; }
+/* ── iOS / global scroll fixes ── */
+html {
+  height: 100%;
+  /* Prevent rubber-band bounce stealing scroll */
+  overscroll-behavior: none;
+}
 
+body {
+  margin: 0;
+  background: #0d1117;
+  height: 100%;
+  /* Let the page grow naturally — never clip it */
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Hide scrollbar on all browsers */
+  scrollbar-width: none;
+}
+body::-webkit-scrollbar { display: none; }
+
+/* ── Widget shell ── */
 .er-widget {
   font-family: 'DM Sans', sans-serif;
   background: #0d1117;
   color: #ffffff;
   width: 100%;
+  /* Use dvh so iOS address-bar changes don't clip content.
+     Falls back to 100vh on older browsers. */
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  /* Critical: never hide overflow on the outer shell */
+  overflow: visible;
 }
 
-/* Header */
+/* ── Header ── */
 .er-header {
   background: #111820;
   padding: 22px 36px;
@@ -29,6 +53,7 @@ body { margin: 0; background: #0d1117; }
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #21303f;
+  /* Keep header above content, but NOT fixed/sticky to avoid iOS issues */
 }
 .er-title {
   font-family: 'DM Sans', sans-serif;
@@ -59,15 +84,20 @@ body { margin: 0; background: #0d1117; }
 }
 @keyframes er-blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
-/* Tabs */
+/* ── Tab nav ── */
 .er-tabs-nav {
   display: flex;
   background: #111820;
   border-bottom: 1px solid #21303f;
   overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  /* Prevent this from becoming a scroll trap */
+  overscroll-behavior-x: contain;
 }
 .er-tabs-nav::-webkit-scrollbar { display: none; }
+
 .er-tab-btn {
   flex: 1;
   min-width: 130px;
@@ -83,15 +113,24 @@ body { margin: 0; background: #0d1117; }
   transition: color 0.18s, border-color 0.18s, background 0.18s;
   text-align: center;
   white-space: nowrap;
+  /* Prevent iOS tap highlight flash */
+  -webkit-tap-highlight-color: transparent;
 }
 .er-tab-btn:hover { color: #ffffff; background: rgba(255,255,255,0.04); }
 .er-tab-btn.er-active { color: #ffffff; border-bottom-color: #e2a930; }
 
-/* Tab panel */
-.er-panel { display: none; padding: 32px 36px 40px; flex: 1; }
+/* ── Panels ── */
+#erPanels {
+  flex: 1;
+  /* Must NOT be overflow:hidden or a fixed height —
+     let it grow so the page-level scroll works */
+  overflow: visible;
+}
+
+.er-panel { display: none; padding: 32px 36px 40px; }
 .er-panel.er-active { display: block; }
 
-/* Progress section */
+/* ── Progress box ── */
 .er-progress-box {
   background: #161d26;
   border: 1px solid #21303f;
@@ -139,7 +178,7 @@ body { margin: 0; background: #0d1117; }
   transition: width 1s ease;
 }
 
-/* Section label */
+/* ── Section labels ── */
 .er-section-label {
   font-size: 0.74rem;
   font-weight: 700;
@@ -150,7 +189,7 @@ body { margin: 0; background: #0d1117; }
   margin-top: 28px;
 }
 
-/* Parties grid */
+/* ── Party cards ── */
 .er-parties-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -185,7 +224,7 @@ body { margin: 0; background: #0d1117; }
 .er-badge-loss  { background: rgba(218,54,51,0.2);  color: #f85149; }
 .er-badge-zero  { background: rgba(138,154,176,0.12); color: #8a9ab0; }
 
-/* Results list */
+/* ── Results list ── */
 .er-results-list { display: flex; flex-direction: column; gap: 11px; }
 .er-result-card {
   background: #161d26;
@@ -221,7 +260,7 @@ body { margin: 0; background: #0d1117; }
 }
 .er-result-time { font-size: 0.76rem; color: #8a9ab0; margin-top: 3px; }
 
-/* Overall leaderboard */
+/* ── Overall leaderboard ── */
 .er-overall-list { display: flex; flex-direction: column; gap: 10px; }
 .er-overall-row {
   background: #161d26;
@@ -241,7 +280,7 @@ body { margin: 0; background: #0d1117; }
 .er-net-neg { color: #f85149; }
 .er-net-zero { color: #8a9ab0; }
 
-/* States */
+/* ── States ── */
 .er-loading, .er-error {
   padding: 60px;
   text-align: center;
@@ -250,16 +289,28 @@ body { margin: 0; background: #0d1117; }
 }
 .er-error { color: #f85149; }
 
-/* Footer */
+/* ── Footer ── */
 .er-footer {
   background: #111820;
   border-top: 1px solid #21303f;
   padding: 13px 36px;
+  /* Safe area inset for iPhone notch / home bar */
+  padding-bottom: max(13px, env(safe-area-inset-bottom));
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 0.78rem;
   color: #4a5568;
+}
+
+/* ── Mobile tweaks ── */
+@media (max-width: 600px) {
+  .er-header { padding: 16px 18px; }
+  .er-title  { font-size: 1.1rem; }
+  .er-panel  { padding: 20px 16px 32px; }
+  .er-footer { padding: 10px 18px; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+  .er-parties-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+  .er-overall-breakdown { display: none; } /* too cramped on small screens */
 }
 </style>
 </head>
@@ -271,7 +322,7 @@ body { margin: 0; background: #0d1117; }
     <div class="er-live-badge"><div class="er-live-dot"></div>Live</div>
   </div>
   <div class="er-tabs-nav" id="erTabsNav"></div>
-  <div id="erPanels" style="flex:1;"></div>
+  <div id="erPanels"></div>
   <div class="er-footer">
     <span>Refreshes every 60 seconds</span>
     <span id="erLastUpdated">—</span>
@@ -285,7 +336,7 @@ body { margin: 0; background: #0d1117; }
 var SHEET_ID = '1pqObzBVhI2vW1lijyoPvsUQzvG28-bz0qqUBRnPsUnA';
 
 // ================================================================
-//  Election tabs — label shown in nav, sheet = exact Google Sheet tab name
+//  Election tabs
 // ================================================================
 var ELECTIONS = [
   { key: 'local',    label: 'Local Gov (England)', sheet: 'LocalGov', defaultParties: [] },
@@ -309,7 +360,7 @@ var ELECTIONS = [
 ];
 
 // ================================================================
-//  Party brand colours
+//  Party colours
 // ================================================================
 var PARTY_COLORS = {
   'reform':             '#12B6CF',
@@ -329,9 +380,6 @@ var PARTY_COLORS = {
   'independent':        '#6B7280',
 };
 
-// ================================================================
-//  Party sort order (first = highest priority)
-// ================================================================
 var PARTY_ORDER = ['reform', 'green', 'labour', 'conservative', 'tory', 'lib dem', 'libdem', 'liberal democrat', 'snp', 'scottish national', 'plaid'];
 var PARTY_LAST  = ['other', 'independent'];
 
@@ -399,7 +447,6 @@ function parseSheet(csvText) {
   return data;
 }
 
-// Merge sheet parties with defaults — sheet data wins, defaults fill gaps
 function mergeParties(sheetParties, defaults) {
   var result = sheetParties.slice();
   defaults.forEach(function(def) {
@@ -502,54 +549,6 @@ function renderPanel(data) {
 }
 
 // ================================================================
-//  Overall net seats leaderboard
-// ================================================================
-function buildOverallData() {
-  var totals = {};
-  ELECTIONS.forEach(function(el) {
-    var data = cache[el.key];
-    if (!data) return;
-    data.parties.forEach(function(p) {
-      var key = p.name.toLowerCase().trim();
-      if (!totals[key]) totals[key] = { name: p.name, gains: 0, losses: 0 };
-      totals[key].gains  += p.gains;
-      totals[key].losses += p.losses;
-    });
-  });
-  return Object.values(totals).sort(function(a, b) {
-    return (b.gains - b.losses) - (a.gains - a.losses);
-  });
-}
-
-function renderOverall() {
-  var panel = document.getElementById('erPanel-overall');
-  if (!panel) return;
-  var parties = buildOverallData();
-  if (!parties.length) {
-    panel.innerHTML = '<div class="er-loading">Waiting for election data…</div>';
-    return;
-  }
-  var html = '<div class="er-section-label">Net Seats — All Elections Combined</div>' +
-             '<div class="er-overall-list">';
-  parties.forEach(function(p, i) {
-    var net = p.gains - p.losses;
-    var col = partyColor(p.name);
-    var netStr = net > 0 ? '+' + net : '' + net;
-    var netClass = net > 0 ? 'er-net-pos' : net < 0 ? 'er-net-neg' : 'er-net-zero';
-    var rank = i + 1;
-    var rankDisplay = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#' + rank;
-    html += '<div class="er-overall-row" style="border-left-color:' + col + '">' +
-            '<div class="er-overall-rank">' + rankDisplay + '</div>' +
-            '<div class="er-overall-name">' + p.name + '</div>' +
-            '<div class="er-overall-breakdown">+' + p.gains + ' gains / −' + p.losses + ' losses</div>' +
-            '<div class="er-overall-net ' + netClass + '">' + netStr + '</div>' +
-            '</div>';
-  });
-  html += '</div>';
-  panel.innerHTML = html;
-}
-
-// ================================================================
 //  Tab UI & lifecycle
 // ================================================================
 var activeKey = ELECTIONS[0].key;
@@ -584,6 +583,8 @@ function switchTab(key) {
   document.querySelectorAll('.er-panel').forEach(function(p) {
     p.classList.toggle('er-active', p.id === 'erPanel-' + key);
   });
+  // Scroll to top of page when switching tab — feels natural on mobile
+  window.scrollTo({ top: 0, behavior: 'smooth' });
   if (!cache[key]) {
     var el = ELECTIONS.find(function(e) { return e.key === key; });
     if (el) loadElection(el);
