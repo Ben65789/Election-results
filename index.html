@@ -13,8 +13,12 @@ html, body {
   margin: 0;
   padding: 0;
   background: #0d1117;
-  /* No height, no overflow — just a normal scrolling page */
+  overflow-x: hidden;
+  overflow-y: auto;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  height: 100%;
 }
 html::-webkit-scrollbar,
 body::-webkit-scrollbar { display: none; }
