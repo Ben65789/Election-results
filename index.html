@@ -46,14 +46,6 @@
 .er-badge-gain  { background: rgba(35,134,54,0.2);  color: #3fb950; }
 .er-badge-loss  { background: rgba(218,54,51,0.2);  color: #f85149; }
 .er-badge-zero  { background: rgba(138,154,176,0.12); color: #8a9ab0; }
-.er-results-list { display: flex; flex-direction: column; gap: 11px; }
-.er-result-card { background: #161d26; border: 1px solid #21303f; border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; gap: 18px; border-left: 5px solid; }
-.er-result-info { flex: 1; min-width: 0; }
-.er-result-area { font-size: 1rem; font-weight: 600; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.er-result-party { font-size: 0.82rem; color: #8a9ab0; margin-top: 3px; font-weight: 500; }
-.er-result-meta { text-align: right; white-space: nowrap; }
-.er-result-maj { font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: #ffffff; font-weight: 600; }
-.er-result-time { font-size: 0.76rem; color: #8a9ab0; margin-top: 3px; }
 .er-loading, .er-error { padding: 60px; text-align: center; font-size: 0.95rem; color: #8a9ab0; }
 .er-error { color: #f85149; }
 .er-footer { background: #111820; border-top: 1px solid #21303f; padding: 13px 36px; display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: #4a5568; }
@@ -120,7 +112,6 @@ var PARTY_COLORS = {
 var PARTY_ORDER = ['reform', 'green', 'labour', 'conservative', 'tory', 'lib dem', 'lib dems', 'libdem', 'liberal democrat', 'snp', 'scottish national', 'plaid'];
 var PARTY_LAST  = ['other', 'independent'];
 
-// Normalise all Lib Dem variants to a single canonical name
 function normalisePartyName(name) {
   var n = (name || '').toLowerCase().trim();
   if (n === 'lib dem' || n === 'lib dems' || n === 'libdem' || n === 'liberal democrat' || n === 'liberal democrats') return 'Lib Dems';
@@ -178,14 +169,6 @@ function parseSheet(csvText) {
         losses: parseInt(row[2]) || 0
       });
     }
-    if (section === 'results') {
-      data.results.push({
-        area: row[0] || '',
-        party: normalisePartyName(row[1] || ''),
-        majority: row[2] || '',
-        time: row[3] || ''
-      });
-    }
   }
   return data;
 }
@@ -224,12 +207,7 @@ function renderPanel(data) {
     return '<div class="er-party-card" style="border-left-color:' + col + '"><div class="er-party-name">' + p.name + '</div><div class="er-party-row"><span class="er-badge ' + gc + '">' + gainStr + '</span><span class="er-badge ' + lc + '">' + lossStr + '</span></div></div>';
   }).join('');
 
-  var resultsHtml = data.results.slice(0, 5).map(function(r) {
-    var col = partyColor(r.party);
-    return '<div class="er-result-card" style="border-left-color:' + col + '"><div class="er-result-info"><div class="er-result-area">' + (r.area || '—') + '</div><div class="er-result-party">' + (r.party || '—') + '</div></div><div class="er-result-meta">' + (r.majority ? '<div class="er-result-maj">Maj: ' + r.majority + '</div>' : '') + (r.time ? '<div class="er-result-time">' + r.time + '</div>' : '') + '</div></div>';
-  }).join('') || '<div style="color:#8a9ab0;font-size:0.9rem;padding:10px 0">No results declared yet</div>';
-
-  return '<div class="er-progress-box"><div class="er-progress-row"><span class="er-progress-label">Seats Declared</span><div class="er-progress-pct-wrap"><div class="er-progress-pct">' + pct + '%</div><div class="er-progress-sub">' + data.declared + ' of ' + data.totalSeats + ' seats</div></div></div><div class="er-progress-track"><div class="er-progress-fill" style="width:' + pct + '%"></div></div></div><div class="er-section-label">Party Gains &amp; Losses</div><div class="er-parties-grid">' + (partiesHtml || '<div style="color:#8a9ab0;font-size:0.9rem">No party data yet</div>') + '</div><div class="er-section-label">Latest Results</div><div class="er-results-list">' + resultsHtml + '</div>';
+  return '<div class="er-progress-box"><div class="er-progress-row"><span class="er-progress-label">Seats Declared</span><div class="er-progress-pct-wrap"><div class="er-progress-pct">' + pct + '%</div><div class="er-progress-sub">' + data.declared + ' of ' + data.totalSeats + ' seats</div></div></div><div class="er-progress-track"><div class="er-progress-fill" style="width:' + pct + '%"></div></div></div><div class="er-section-label">Party Gains &amp; Losses</div><div class="er-parties-grid">' + (partiesHtml || '<div style="color:#8a9ab0;font-size:0.9rem">No party data yet</div>') + '</div>';
 }
 
 var activeKey = ELECTIONS[0].key;
