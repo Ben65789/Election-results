@@ -1,12 +1,24 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ── Full-width breakout: escapes WordPress content column on both mobile and desktop ── */
+.er-outer {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  max-width: 100vw;
+}
+
 .er-widget {
   font-family: 'DM Sans', sans-serif;
   background: #0d1117;
   color: #ffffff;
   width: 100%;
   display: block;
+  min-height: 100vh;
 }
 .er-header {
   background: #111820;
@@ -61,16 +73,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<div class="er-widget">
-  <div class="er-header">
-    <div class="er-title">🗳 UK Elections <span>2026</span> – Live Results</div>
-    <div class="er-live-badge"><div class="er-live-dot"></div>Live</div>
-  </div>
-  <div class="er-tabs-nav" id="erTabsNav"></div>
-  <div id="erPanels"></div>
-  <div class="er-footer">
-    <span>Refreshes every 60 seconds</span>
-    <span id="erLastUpdated">—</span>
+<div class="er-outer">
+  <div class="er-widget">
+    <div class="er-header">
+      <div class="er-title">🗳 UK Elections <span>2026</span> – Live Results</div>
+      <div class="er-live-badge"><div class="er-live-dot"></div>Live</div>
+    </div>
+    <div class="er-tabs-nav" id="erTabsNav"></div>
+    <div id="erPanels"></div>
+    <div class="er-footer">
+      <span>Refreshes every 60 seconds</span>
+      <span id="erLastUpdated">—</span>
+    </div>
   </div>
 </div>
 
@@ -85,7 +99,7 @@ var ELECTIONS = [
       { name: 'Labour',       gains: 0, losses: 0 },
       { name: 'Conservative', gains: 0, losses: 0 },
       { name: 'SNP',          gains: 0, losses: 0 },
-      { name: 'Lib Dems',     gains: 0, losses: 0 },
+      { name: 'LibDems',      gains: 0, losses: 0 },
   ]},
   { key: 'senedd', label: 'Senedd Cymru', sheet: 'Senedd', defaultParties: [
       { name: 'Reform UK',    gains: 0, losses: 0 },
@@ -93,7 +107,7 @@ var ELECTIONS = [
       { name: 'Labour',       gains: 0, losses: 0 },
       { name: 'Conservative', gains: 0, losses: 0 },
       { name: 'Plaid Cymru',  gains: 0, losses: 0 },
-      { name: 'Lib Dems',     gains: 0, losses: 0 },
+      { name: 'LibDems',      gains: 0, losses: 0 },
   ]},
   { key: 'mayoral', label: 'Mayorals (ENG)', sheet: 'Mayoral', defaultParties: [] },
 ];
@@ -102,19 +116,19 @@ var PARTY_COLORS = {
   'reform': '#12B6CF', 'reform uk': '#12B6CF',
   'labour': '#E4003B',
   'conservative': '#003087', 'tory': '#003087',
-  'lib dem': '#FAA61A', 'lib dems': '#FAA61A', 'libdem': '#FAA61A', 'liberal democrat': '#FAA61A', 'liberal democrats': '#FAA61A',
+  'lib dem': '#FAA61A', 'lib dems': '#FAA61A', 'libdems': '#FAA61A', 'libdem': '#FAA61A', 'liberal democrat': '#FAA61A', 'liberal democrats': '#FAA61A',
   'green': '#00B140',
   'snp': '#FFDD00', 'scottish national': '#FFDD00',
   'plaid': '#3F8428', 'plaid cymru': '#3F8428',
   'other': '#6B7280', 'independent': '#6B7280',
 };
 
-var PARTY_ORDER = ['reform', 'green', 'labour', 'conservative', 'tory', 'lib dem', 'lib dems', 'libdem', 'liberal democrat', 'snp', 'scottish national', 'plaid'];
+var PARTY_ORDER = ['reform', 'green', 'labour', 'conservative', 'tory', 'libdems', 'libdem', 'lib dem', 'liberal democrat', 'snp', 'scottish national', 'plaid'];
 var PARTY_LAST  = ['other', 'independent'];
 
 function normalisePartyName(name) {
   var n = (name || '').toLowerCase().trim();
-  if (n === 'lib dem' || n === 'lib dems' || n === 'libdem' || n === 'liberal democrat' || n === 'liberal democrats') return 'Lib Dems';
+  if (n === 'lib dem' || n === 'lib dems' || n === 'libdem' || n === 'libdems' || n === 'liberal democrat' || n === 'liberal democrats') return 'LibDems';
   return name;
 }
 
@@ -152,7 +166,7 @@ function parseCSV(text) {
 
 function parseSheet(csvText) {
   var rows = parseCSV(csvText);
-  var data = { totalSeats: 0, declared: 0, parties: [], results: [] };
+  var data = { totalSeats: 0, declared: 0, parties: [] };
   var section = 'meta';
   for (var i = 0; i < rows.length; i++) {
     var row = rows[i];
