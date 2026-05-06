@@ -13,15 +13,11 @@ html, body {
   margin: 0;
   padding: 0;
   background: #0d1117;
-
-  /* FIX SCROLLING (THIS IS THE IMPORTANT BIT) */
-  overflow-x: hidden;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
-
   scrollbar-width: none;
-  height: 100%;
+  /* ✅ FIX 1: Tell iOS this page scrolls vertically */
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: auto;
 }
 html::-webkit-scrollbar,
 body::-webkit-scrollbar { display: none; }
@@ -43,7 +39,6 @@ body::-webkit-scrollbar { display: none; }
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #21303f;
-  /* Keep header above content, but NOT fixed/sticky to avoid iOS issues */
 }
 .er-title {
   font-family: 'DM Sans', sans-serif;
@@ -83,8 +78,9 @@ body::-webkit-scrollbar { display: none; }
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  /* Prevent this from becoming a scroll trap */
   overscroll-behavior-x: contain;
+  /* ✅ FIX 2: Only handle horizontal swipes — vertical passes through to the page */
+  touch-action: pan-x;
 }
 .er-tabs-nav::-webkit-scrollbar { display: none; }
 
@@ -103,7 +99,6 @@ body::-webkit-scrollbar { display: none; }
   transition: color 0.18s, border-color 0.18s, background 0.18s;
   text-align: center;
   white-space: nowrap;
-  /* Prevent iOS tap highlight flash */
   -webkit-tap-highlight-color: transparent;
 }
 .er-tab-btn:hover { color: #ffffff; background: rgba(255,255,255,0.04); }
@@ -281,7 +276,6 @@ body::-webkit-scrollbar { display: none; }
   background: #111820;
   border-top: 1px solid #21303f;
   padding: 13px 36px;
-  /* Safe area inset for iPhone notch / home bar */
   padding-bottom: max(13px, env(safe-area-inset-bottom));
   display: flex;
   justify-content: space-between;
@@ -297,7 +291,7 @@ body::-webkit-scrollbar { display: none; }
   .er-panel  { padding: 20px 16px 32px; }
   .er-footer { padding: 10px 18px; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
   .er-parties-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
-  .er-overall-breakdown { display: none; } /* too cramped on small screens */
+  .er-overall-breakdown { display: none; }
 }
 </style>
 </head>
@@ -570,8 +564,8 @@ function switchTab(key) {
   document.querySelectorAll('.er-panel').forEach(function(p) {
     p.classList.toggle('er-active', p.id === 'erPanel-' + key);
   });
-  // Scroll to top of page when switching tab — feels natural on mobile
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // ✅ FIX 3: Scroll to top — use try/catch in case we're inside an iframe with restrictions
+  try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) {}
   if (!cache[key]) {
     var el = ELECTIONS.find(function(e) { return e.key === key; });
     if (el) loadElection(el);
