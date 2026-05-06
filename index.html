@@ -9,40 +9,23 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── iOS / global scroll fixes ── */
-html {
-  height: 100%;
-  /* Prevent rubber-band bounce stealing scroll */
-  overscroll-behavior: none;
-}
-
-body {
+html, body {
   margin: 0;
+  padding: 0;
   background: #0d1117;
-  height: 100%;
-  /* Let the page grow naturally — never clip it */
-  overflow-x: hidden;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  /* Hide scrollbar on all browsers */
+  /* No height, no overflow — just a normal scrolling page */
   scrollbar-width: none;
 }
+html::-webkit-scrollbar,
 body::-webkit-scrollbar { display: none; }
 
-/* ── Widget shell ── */
+/* ── Widget shell — plain block, flows like a normal page ── */
 .er-widget {
   font-family: 'DM Sans', sans-serif;
   background: #0d1117;
   color: #ffffff;
   width: 100%;
-  /* Use dvh so iOS address-bar changes don't clip content.
-     Falls back to 100vh on older browsers. */
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  /* Critical: never hide overflow on the outer shell */
-  overflow: visible;
+  display: block;
 }
 
 /* ── Header ── */
@@ -121,10 +104,7 @@ body::-webkit-scrollbar { display: none; }
 
 /* ── Panels ── */
 #erPanels {
-  flex: 1;
-  /* Must NOT be overflow:hidden or a fixed height —
-     let it grow so the page-level scroll works */
-  overflow: visible;
+  display: block;
 }
 
 .er-panel { display: none; padding: 32px 36px 40px; }
