@@ -1,16 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UK Elections 2026 – Live Results</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html, body { height: 100%; }
-
-.er-outer {
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  width: 100vw;
-  max-width: 100vw;
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: #0d1117;
+  overflow-x: hidden;
 }
 
 .er-widget {
@@ -22,6 +26,8 @@ html, body { height: 100%; }
   display: flex;
   flex-direction: column;
 }
+
+/* Header */
 .er-header {
   background: #111820;
   padding: 22px 36px;
@@ -31,19 +37,50 @@ html, body { height: 100%; }
   border-bottom: 1px solid #21303f;
   flex-shrink: 0;
 }
-.er-title { font-family: 'DM Sans', sans-serif; font-size: 1.6rem; font-weight: 700; color: #ffffff; letter-spacing: -0.01em; }
+.er-title { font-family: 'DM Sans', sans-serif; font-size: 1.6rem; font-weight: 700; color: #ffffff; letter-spacing: -0.01em; flex: 1; min-width: 0; }
 .er-title span { color: #e2a930; }
-.er-live-badge { display: flex; align-items: center; gap: 7px; background: #da3633; color: #fff; padding: 6px 14px; border-radius: 5px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.er-live-badge { display: flex; align-items: center; gap: 7px; background: #da3633; color: #fff; padding: 6px 14px; border-radius: 5px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; flex-shrink: 0; white-space: nowrap; }
 .er-live-dot { width: 7px; height: 7px; background: #fff; border-radius: 50%; animation: er-blink 1.4s infinite; }
 @keyframes er-blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-.er-tabs-nav { display: flex; background: #111820; border-bottom: 1px solid #21303f; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; touch-action: pan-x; flex-shrink: 0; }
+
+/* Tabs */
+.er-tabs-nav {
+  display: flex;
+  background: #111820;
+  border-bottom: 1px solid #21303f;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  touch-action: pan-x;
+  flex-shrink: 0;
+}
 .er-tabs-nav::-webkit-scrollbar { display: none; }
-.er-tab-btn { flex: 1; min-width: 130px; padding: 16px 18px; background: none; border: none; border-bottom: 3px solid transparent; color: #8a9ab0; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: color 0.18s, border-color 0.18s, background 0.18s; text-align: center; white-space: nowrap; -webkit-tap-highlight-color: transparent; }
+.er-tab-btn {
+  flex: 0 0 auto;
+  padding: 16px 20px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #8a9ab0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.18s, border-color 0.18s, background 0.18s;
+  text-align: center;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
 .er-tab-btn:hover { color: #ffffff; background: rgba(255,255,255,0.04); }
 .er-tab-btn.er-active { color: #ffffff; border-bottom-color: #e2a930; }
+
+/* Panels */
 #erPanels { display: flex; flex-direction: column; flex: 1; }
 .er-panel { display: none; padding: 32px 36px 40px; flex: 1; flex-direction: column; }
 .er-panel.er-active { display: flex; }
+
+/* Progress */
 .er-progress-box { background: #161d26; border: 1px solid #21303f; border-radius: 10px; padding: 22px 28px; margin-bottom: 30px; }
 .er-progress-row { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 14px; }
 .er-progress-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #8a9ab0; }
@@ -52,6 +89,8 @@ html, body { height: 100%; }
 .er-progress-sub { font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: #8a9ab0; margin-top: 4px; }
 .er-progress-track { height: 9px; background: #21303f; border-radius: 5px; overflow: hidden; }
 .er-progress-fill { height: 100%; background: linear-gradient(90deg, #e2a930 0%, #e4003b 100%); border-radius: 5px; transition: width 1s ease; }
+
+/* Sections */
 .er-section-label { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #8a9ab0; margin-bottom: 14px; margin-top: 28px; }
 .er-parties-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
 .er-party-card { background: #161d26; border: 1px solid #21303f; border-radius: 10px; padding: 16px 18px; border-left: 5px solid; }
@@ -61,33 +100,82 @@ html, body { height: 100%; }
 .er-badge-gain  { background: rgba(35,134,54,0.2);  color: #3fb950; }
 .er-badge-loss  { background: rgba(218,54,51,0.2);  color: #f85149; }
 .er-badge-zero  { background: rgba(138,154,176,0.12); color: #8a9ab0; }
+
+/* Results */
+.er-results-list { display: flex; flex-direction: column; gap: 11px; }
+.er-result-card { background: #161d26; border: 1px solid #21303f; border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; gap: 18px; border-left: 5px solid; }
+.er-result-info { flex: 1; min-width: 0; }
+.er-result-area { font-size: 1rem; font-weight: 600; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.er-result-party { font-size: 0.82rem; color: #8a9ab0; margin-top: 3px; font-weight: 500; }
+.er-result-meta { text-align: right; white-space: nowrap; }
+.er-result-maj { font-size: 0.82rem; color: #ffffff; font-weight: 600; }
+.er-result-time { font-size: 0.76rem; color: #8a9ab0; margin-top: 3px; }
+
+/* Net rankings */
+.er-overall-list { display: flex; flex-direction: column; gap: 10px; }
+.er-overall-row { background: #161d26; border: 1px solid #21303f; border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; border-left: 5px solid; }
+.er-overall-rank { font-size: 1.1rem; font-weight: 700; color: #8a9ab0; min-width: 32px; text-align: center; }
+.er-overall-name { flex: 1; font-size: 1rem; font-weight: 700; color: #ffffff; text-transform: uppercase; letter-spacing: 0.05em; min-width: 0; }
+.er-overall-net { font-size: 1.5rem; font-weight: 700; min-width: 80px; text-align: right; }
+.er-overall-breakdown { font-size: 0.76rem; color: #8a9ab0; text-align: right; white-space: nowrap; min-width: 90px; }
+.er-net-pos { color: #3fb950; }
+.er-net-neg { color: #f85149; }
+.er-net-zero { color: #8a9ab0; }
+
+/* States */
 .er-loading, .er-error { padding: 60px; text-align: center; font-size: 0.95rem; color: #8a9ab0; flex: 1; display: flex; align-items: center; justify-content: center; }
 .er-error { color: #f85149; }
-.er-footer { background: #111820; border-top: 1px solid #21303f; padding: 13px 36px; display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: #4a5568; flex-shrink: 0; margin-top: auto; }
+
+/* Footer */
+.er-footer { background: #111820; border-top: 1px solid #21303f; padding: 13px 36px; display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: #4a5568; flex-shrink: 0; }
+
+/* ── Mobile ── */
 @media (max-width: 600px) {
-  .er-header { padding: 16px 18px; }
-  .er-title  { font-size: 1.1rem; }
-  .er-panel  { padding: 20px 16px 32px; }
-  .er-footer { padding: 10px 18px; }
+  .er-header { padding: 14px 16px; gap: 10px; }
+  .er-title { font-size: 1rem; }
+  .er-live-badge { font-size: 0.68rem; padding: 4px 9px; }
+  .er-tab-btn { font-size: 0.78rem; padding: 12px 14px; }
+  .er-panel { padding: 16px 14px 28px; }
+  .er-progress-box { padding: 14px 16px; margin-bottom: 20px; }
+  .er-progress-pct { font-size: 1.7rem; }
+  .er-parties-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .er-party-card { padding: 12px 12px; }
+  .er-party-name { font-size: 0.7rem; margin-bottom: 8px; }
+  .er-badge { font-size: 0.8rem; padding: 3px 7px; min-width: 34px; }
+  .er-result-card { padding: 12px 14px; gap: 10px; }
+  .er-result-area { font-size: 0.88rem; }
+  .er-overall-row { padding: 12px 12px; gap: 10px; flex-wrap: wrap; }
+  .er-overall-rank { font-size: 0.95rem; min-width: 26px; }
+  .er-overall-name { font-size: 0.82rem; }
+  .er-overall-breakdown { font-size: 0.68rem; min-width: unset; width: 100%; text-align: left; padding-left: 36px; margin-top: -4px; order: 4; }
+  .er-overall-net { font-size: 1.2rem; min-width: 55px; }
+  .er-section-label { font-size: 0.66rem; margin-top: 20px; margin-bottom: 10px; }
+  .er-footer { padding: 10px 14px; font-size: 0.68rem; }
+}
+
+/* ── Tablet ── */
+@media (min-width: 601px) and (max-width: 900px) {
+  .er-header { padding: 18px 24px; }
+  .er-title { font-size: 1.25rem; }
+  .er-panel { padding: 22px 24px 32px; }
   .er-parties-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+  .er-overall-breakdown { font-size: 0.72rem; min-width: 70px; }
+  .er-overall-net { font-size: 1.3rem; }
 }
 </style>
+</head>
+<body>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<div class="er-outer">
-  <div class="er-widget">
-    <div class="er-header">
-      <div class="er-title">🗳 UK Elections <span>2026</span> – Live Results</div>
-      <div class="er-live-badge"><div class="er-live-dot"></div>Live</div>
-    </div>
-    <div class="er-tabs-nav" id="erTabsNav"></div>
-    <div id="erPanels"></div>
-    <div class="er-footer">
-      <span>Refreshes every 60 seconds</span>
-      <span id="erLastUpdated">—</span>
-    </div>
+<div class="er-widget">
+  <div class="er-header">
+    <div class="er-title">🗳 UK Elections <span>2026</span> – Live Results</div>
+    <div class="er-live-badge"><div class="er-live-dot"></div>Live</div>
+  </div>
+  <div class="er-tabs-nav" id="erTabsNav"></div>
+  <div id="erPanels"></div>
+  <div class="er-footer">
+    <span>Refreshes every 60 seconds</span>
+    <span id="erLastUpdated">—</span>
   </div>
 </div>
 
@@ -95,8 +183,8 @@ html, body { height: 100%; }
 var SHEET_ID = '1pqObzBVhI2vW1lijyoPvsUQzvG28-bz0qqUBRnPsUnA';
 
 var ELECTIONS = [
-  { key: 'local',    label: 'Locals (ENG)', sheet: 'LocalGov', defaultParties: [] },
-  { key: 'holyrood', label: 'Holyrood', sheet: 'Scottish', defaultParties: [
+  { key: 'local',    label: 'Locals (ENG)',    sheet: 'LocalGov', defaultParties: [] },
+  { key: 'holyrood', label: 'Holyrood',         sheet: 'Scottish', defaultParties: [
       { name: 'Reform UK',    gains: 0, losses: 0 },
       { name: 'Green',        gains: 0, losses: 0 },
       { name: 'Labour',       gains: 0, losses: 0 },
@@ -104,7 +192,7 @@ var ELECTIONS = [
       { name: 'SNP',          gains: 0, losses: 0 },
       { name: 'LibDems',      gains: 0, losses: 0 },
   ]},
-  { key: 'senedd', label: 'Senedd Cymru', sheet: 'Senedd', defaultParties: [
+  { key: 'senedd',   label: 'Senedd Cymru',     sheet: 'Senedd',  defaultParties: [
       { name: 'Reform UK',    gains: 0, losses: 0 },
       { name: 'Green',        gains: 0, losses: 0 },
       { name: 'Labour',       gains: 0, losses: 0 },
@@ -112,7 +200,7 @@ var ELECTIONS = [
       { name: 'Plaid Cymru',  gains: 0, losses: 0 },
       { name: 'LibDems',      gains: 0, losses: 0 },
   ]},
-  { key: 'mayoral', label: 'Mayorals (ENG)', sheet: 'Mayoral', defaultParties: [] },
+  { key: 'mayoral',  label: 'Mayorals (ENG)',   sheet: 'Mayoral', defaultParties: [] },
 ];
 
 var PARTY_COLORS = {
@@ -169,7 +257,7 @@ function parseCSV(text) {
 
 function parseSheet(csvText) {
   var rows = parseCSV(csvText);
-  var data = { totalSeats: 0, declared: 0, parties: [] };
+  var data = { totalSeats: 0, declared: 0, parties: [], results: [] };
   var section = 'meta';
   for (var i = 0; i < rows.length; i++) {
     var row = rows[i];
@@ -180,11 +268,10 @@ function parseSheet(csvText) {
     if (key === 'party')       { section = 'parties'; continue; }
     if (key === 'area')        { section = 'results';  continue; }
     if (section === 'parties') {
-      data.parties.push({
-        name: normalisePartyName(row[0] || ''),
-        gains: parseInt(row[1]) || 0,
-        losses: parseInt(row[2]) || 0
-      });
+      data.parties.push({ name: normalisePartyName(row[0] || ''), gains: parseInt(row[1]) || 0, losses: parseInt(row[2]) || 0 });
+    }
+    if (section === 'results') {
+      data.results.push({ area: row[0] || '', party: row[1] || '', majority: row[2] || '', time: row[3] || '' });
     }
   }
   return data;
@@ -194,9 +281,7 @@ function mergeParties(sheetParties, defaults) {
   var result = sheetParties.slice();
   defaults.forEach(function(def) {
     var normDef = normalisePartyName(def.name).toLowerCase().trim();
-    var already = result.some(function(p) {
-      return normalisePartyName(p.name).toLowerCase().trim() === normDef;
-    });
+    var already = result.some(function(p) { return normalisePartyName(p.name).toLowerCase().trim() === normDef; });
     if (!already) result.push({ name: normalisePartyName(def.name), gains: def.gains, losses: def.losses });
   });
   return result;
@@ -213,18 +298,35 @@ function badgeClass(n) { return n > 0 ? 'er-badge-gain' : n < 0 ? 'er-badge-loss
 
 function renderPanel(data) {
   var pct = pctStr(data.declared, data.totalSeats);
-  var sorted = data.parties.slice().sort(function(a, b) { return partyPriority(a.name) - partyPriority(b.name); });
 
+  var sorted = data.parties.slice().sort(function(a, b) { return partyPriority(a.name) - partyPriority(b.name); });
   var partiesHtml = sorted.map(function(p) {
     var col = partyColor(p.name);
-    var gc = badgeClass(p.gains);
-    var lc = badgeClass(-p.losses);
     var gainStr = p.gains > 0 ? '+' + p.gains : p.gains === 0 ? '0' : '' + p.gains;
     var lossStr = p.losses > 0 ? '−' + p.losses : '0';
-    return '<div class="er-party-card" style="border-left-color:' + col + '"><div class="er-party-name">' + p.name + '</div><div class="er-party-row"><span class="er-badge ' + gc + '">' + gainStr + '</span><span class="er-badge ' + lc + '">' + lossStr + '</span></div></div>';
+    return '<div class="er-party-card" style="border-left-color:' + col + '"><div class="er-party-name">' + p.name + '</div><div class="er-party-row"><span class="er-badge ' + badgeClass(p.gains) + '">' + gainStr + '</span><span class="er-badge ' + badgeClass(-p.losses) + '">' + lossStr + '</span></div></div>';
   }).join('');
 
-  return '<div class="er-progress-box"><div class="er-progress-row"><span class="er-progress-label">Seats Declared</span><div class="er-progress-pct-wrap"><div class="er-progress-pct">' + pct + '%</div><div class="er-progress-sub">' + data.declared + ' of ' + data.totalSeats + ' seats</div></div></div><div class="er-progress-track"><div class="er-progress-fill" style="width:' + pct + '%"></div></div></div><div class="er-section-label">Party Gains &amp; Losses</div><div class="er-parties-grid">' + (partiesHtml || '<div style="color:#8a9ab0;font-size:0.9rem">No party data yet</div>') + '</div>';
+  var resultsHtml = (data.results || []).slice(0, 5).map(function(r) {
+    var col = partyColor(r.party);
+    return '<div class="er-result-card" style="border-left-color:' + col + '"><div class="er-result-info"><div class="er-result-area">' + (r.area||'—') + '</div><div class="er-result-party">' + (r.party||'—') + '</div></div><div class="er-result-meta">' + (r.majority ? '<div class="er-result-maj">Maj: ' + r.majority + '</div>' : '') + (r.time ? '<div class="er-result-time">' + r.time + '</div>' : '') + '</div></div>';
+  }).join('') || '<div style="color:#8a9ab0;font-size:0.9rem;padding:10px 0">No results declared yet</div>';
+
+  var netSorted = data.parties.slice().sort(function(a, b) { return (b.gains - b.losses) - (a.gains - a.losses); });
+  var rankingsHtml = '<div class="er-overall-list">' + netSorted.map(function(p, i) {
+    var net = p.gains - p.losses;
+    var col = partyColor(p.name);
+    var netStr = net > 0 ? '+' + net : '' + net;
+    var netClass = net > 0 ? 'er-net-pos' : net < 0 ? 'er-net-neg' : 'er-net-zero';
+    var rank = i + 1;
+    var rankDisplay = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#' + rank;
+    return '<div class="er-overall-row" style="border-left-color:' + col + '"><div class="er-overall-rank">' + rankDisplay + '</div><div class="er-overall-name">' + p.name + '</div><div class="er-overall-breakdown">+' + p.gains + ' gains / −' + p.losses + ' losses</div><div class="er-overall-net ' + netClass + '">' + netStr + '</div></div>';
+  }).join('') + '</div>';
+
+  return '<div class="er-progress-box"><div class="er-progress-row"><span class="er-progress-label">Seats Declared</span><div class="er-progress-pct-wrap"><div class="er-progress-pct">' + pct + '%</div><div class="er-progress-sub">' + data.declared + ' of ' + data.totalSeats + ' seats</div></div></div><div class="er-progress-track"><div class="er-progress-fill" style="width:' + pct + '%"></div></div></div>' +
+    '<div class="er-section-label">Party Gains &amp; Losses</div><div class="er-parties-grid">' + (partiesHtml || '<div style="color:#8a9ab0;font-size:0.9rem">No party data yet</div>') + '</div>' +
+    '<div class="er-section-label">Latest Results</div><div class="er-results-list">' + resultsHtml + '</div>' +
+    '<div class="er-section-label">Net Seat Rankings</div>' + rankingsHtml;
 }
 
 var activeKey = ELECTIONS[0].key;
@@ -282,3 +384,5 @@ buildUI();
 refreshAll();
 setInterval(refreshAll, 60000);
 </script>
+</body>
+</html>
